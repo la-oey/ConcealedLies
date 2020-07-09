@@ -89,7 +89,6 @@ function pageLoad() {
 function clickConsent() {
     document.getElementById('consent').style.display = 'none';
     document.getElementById('instructions').style.display = 'block';
-    //$('#instructGoalScore').html(expt.goalScore);
     $('#instructPractice').html(expt.practiceTrials);
     $('#instructRounds').html(expt.trials);
     $('#instructMarblesSampled').html(expt.marblesSampled);

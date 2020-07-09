@@ -279,6 +279,8 @@ function restartTrial(){
     $('#catchQ').hide();
     $('#sliderContainer').hide();
     $('#postSlider').hide();
+    $('#slider').addClass('inactiveSlider');
+    $('#slider').removeClass('activeSlider');
 
     trial.startTime = Date.now();
 }
@@ -346,8 +348,11 @@ function submitCatchSlider(){
     }, timeoutTime);
 }
 
+
+
 function catchTrial(role, exptPart){
     var randomCatch = Math.random();
+    randomCatch = 0.1
     if(randomCatch < 0.5){
         if(randomCatch < 0.25){
             trial.catch.question = 'How many red/blue marbles did <i>you</i> think there were?';
@@ -371,10 +376,17 @@ function catchTrial(role, exptPart){
         $('#sliderContainer').css('display','block');
         $('#postSlider').html('<br><br><button class="active-button" id="catch-button" type="button" onclick="submitCatchSlider();">Submit</button>');
         $('#postSlider').css('display','block');
-        $('input[type=range]').on('input',
-            function(){
-                $('#catch-button').prop('disabled',false);
+
+        $('#slider').on('input',
+        function(){
+            var val = $('#slider').prop('value');
+            var dynamColor = 'linear-gradient(90deg, red ' + val + '%, blue ' + val + '%)';
+            $('#slider').removeClass('inactiveSlider');
+            $('#slider').addClass('activeSlider');
+            $('.activeSlider').css('background',dynamColor); 
+            $('#catch-button').prop('disabled',false);
         });
+
     } else{
         if(role == 'bullshitter'){
             trial.catch.question = 'How many red marbles did you actually draw?';
