@@ -49,6 +49,64 @@ input[type=range]::-ms-thumb {
     cursor: pointer;
 }
 
+#slider {
+  overflow: hidden;
+  width: 80px;
+  -webkit-appearance: none;
+  background-color: #9a905d;
+}
+
+#slider::-webkit-slider-thumb {
+  width: 10px;
+  -webkit-appearance: none;
+  height: 10px;
+  background: #434343;
+  box-shadow: -350px 0 0 350px red;
+}
+
+/*firefox*/
+
+input[type="range"]::-moz-range-progress {
+  background-color: #43e5f7; 
+}
+input[type="range"]::-moz-range-track {  
+  background-color: #9a905d;
+}
+
+/*IE*/
+
+#slider::-ms-fill-lower {
+  background-color: #43e5f7; 
+}
+#slider::-ms-fill-upper {  
+  background-color: #9a905d;
+}
+
+
+
+#sliderContainer {
+    width: 700px;
+    display: none;
+}
+
+#slider {
+    width: 100%;
+}
+
+.min {
+    float: left;
+}
+
+.max {
+    float: right;
+}
+
+#correctSlider {
+    position: absolute;
+    left: 54%;
+}
+
+
 .pic {
     height: 200px;
     width: auto;
@@ -219,10 +277,15 @@ body {
 #subjResponse {
     position: relative;
     float: right;
-    padding: 10px;
+    padding-top: 10px;
+    padding-bottom: 2px;
     width: 70%;
     margin-left: 15%;
     margin-right: 15%;
+}
+
+#responseAccRej {
+    font-size: 14px;
 }
 
 #reportMarbles {
@@ -236,7 +299,8 @@ body {
 #buttonResponse {
     position: relative;
     float: right;
-    padding: 5px;
+    padding-top: 2px;
+    padding-bottom: 5px;
     width: 80%;
     margin-left: 10%;
     margin-right: 10%;

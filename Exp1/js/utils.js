@@ -56,12 +56,10 @@ function fillUrn(whooccl) {
                 var color = "blue";
                 // balls in urn correspond to exact probability distribution, i.e. no random sampling
                 if(Math.random() < trial.prob.bullshitDetectorRed){
-                    color = "red"
+                    color = "red";
                     trial.numRed += 1;
-                    //exactRed -= 1;
                 } else{
                     trial.numBlue += 1;
-                    //exactBlue -= 1;
                 }
 
                 marble("#urnsvg", color, 17.5, locX, locY);
@@ -71,10 +69,8 @@ function fillUrn(whooccl) {
                 if(Math.random() < trial.prob.bullshitterRed){
                     color = "red"
                     trial.numRed += 1;
-                    //exactRed -= 1;
                 } else{
                     trial.numBlue += 1;
-                    //exactBlue -= 1;
                 }
 
                 marble("#urnsvg", color, 17.5, locX, locY);
@@ -96,10 +92,8 @@ function fillUrn(whooccl) {
                 if(Math.random() < trial.prob.bullshitDetectorRed){
                     color = "red"
                     trial.numRed += 1;
-                    //exactRed -= 1;
                 } else{
                     trial.numBlue += 1;
-                    //exactBlue -= 1;
                 }
 
                 marble("#urnsvg", color, 17.5, locX, locY);
@@ -117,11 +111,7 @@ function marble(container, color, size, locX, locY){
     d3.select(container).append("circle").attr("cx",locX).attr("cy",locY).attr("r",size).attr("stroke-width",2).attr("stroke","black").style("fill",color);
 }
 
-//function occluder(container, xwidth, yheight, percX, percY, opac){
 function occluder(container, xwidth, yheight, occLeft, occRight, occTop, occBottom, opac){
-    //d3.select(container).append("rect").attr("x",0).attr("y",0).attr("width",xwidth).attr("height",yheight).style("fill","white").attr("stroke-width",yheight*(1-percY)/2).attr("stroke","black").style("opacity",opac);
-    //d3.select(container).append("rect").attr("x",xwidth*(1-percX)/2).attr("y",yheight*(1-percY)/2).attr("width",xwidth*percX).attr("height",yheight*percY).style("fill","white").attr("stroke-width",yheight*(1-percY)/2).attr("stroke","black");
-    
     d3.select(container).append("rect").attr("x",0).attr("y",0).attr("width",xwidth).attr("height",occTop+0.1).style("fill","black").style("opacity",opac);
     d3.select(container).append("rect").attr("x",0).attr("y",occTop).attr("width",occLeft).attr("height",occBottom-occTop).style("fill","black").style("opacity",opac);
     d3.select(container).append("rect").attr("x",occRight).attr("y",occTop).attr("width",xwidth-occRight).attr("height",occBottom-occTop).style("fill","black").style("opacity",opac);
@@ -165,11 +155,8 @@ function draw(){
         $('#draw-button').prop('disabled',true);
         $('#subjResponse').css('opacity','1');
         $('#reportMarbles').prop('disabled',false);
-        var marbleInstruct2 = "<p class='instructText'>Type into the textbox a number <b>between 0 and 10</b>. Then, click 'Report!'</p>";
-        marbleInstruct2 += "<p class='instructText instructTextSmall'>Here's how points work if your opponent thinks you're telling the truth:</p>";
-        marbleInstruct2 += "<p class='instructText instructTextSmall tab'>each <b style='color:red'>red</b> is 1 point for you (marble-drawer); each <b style='color:blue'>blue</b> is 1 point for your opponent (responder).</p>";
-        marbleInstruct2 += "<p class='instructText instructTextSmall'>Remember, your opponent can only see the marbles visible through the cut out hole.</p>";
-        $('#trialInstruct').html(marbleInstruct2);
+        var marbleInstruct = "<p class='instructText'>Remember! Your opponent can only see the marbles visible through the cut out hole.</p>";
+        $('#trialInstruct').html(marbleInstruct);
         trial.responseStartTime = Date.now();
     } 
 }
@@ -184,7 +171,7 @@ function report(){
         trial.waitTime = 1000 + 3000*exponential(0.75);
         setTimeout(function(){
             clearInterval(trial.timer);
-            $('#subjResponse').html("<p><br>Your opponent made a decision. Click 'Next!' to continue.<br><br></p>")
+            $('#subjResponse').html("<p><br>Your opponent made a decision.<br><br></p>")
             $('#subjResponse').css('opacity','1');
             $('#next').prop('disabled',false);
         }, trial.waitTime);
@@ -250,7 +237,7 @@ function computerBSDetector(){
 }
 
 function restartTrial(){
-    document.getElementById('trial').style.display = 'block';
+    $('#trial').css('display','block');
     if(trial.roleCurrent == "bullshitter"){
         var roletxt = "marble-drawer"
     } else{
@@ -290,6 +277,8 @@ function restartTrial(){
     trial.catch.response = -1;
     trial.catch.responseTime = -1;
     $('#catchQ').hide();
+    $('#sliderContainer').hide();
+    $('#postSlider').hide();
 
     trial.startTime = Date.now();
 }
@@ -297,7 +286,7 @@ function restartTrial(){
 function flickerWait(){
     var op = 0.1;
     var increment = 0.1;
-    $('#subjResponse').html('<p><br>Waiting for your opponent...<br><br></p>');
+    $('#subjResponse').html('<p><br><br><br>Waiting for your opponent...<br><br><br></p>');
     $('#subjResponse').css('opacity','0');
     trial.timer = setInterval(go, 50)
     function go(){
@@ -313,7 +302,7 @@ function flickerWait(){
 }
 
 
-function submitCatch(){
+function submitCatchText(){
     trial.catch.responseTime = Date.now() - trial.catch.responseStartTime;
     $('input[type=text]').prop('disabled',true);
     $('input[type=text]').css('opacity','0.7');
@@ -334,28 +323,83 @@ function submitCatch(){
     }, timeoutTime);
 }
 
-function catchTrial(role, exptPart){
-    if(role == 'bullshitter'){
-        trial.catch.question = 'How many red marbles did you actually draw?'
-        trial.catch.key = trial.drawnRed;
+function submitCatchSlider(){
+    trial.catch.responseTime = Date.now() - trial.catch.responseStartTime;
+    trial.catch.response = $('input[type=range]').val();
+    $('input[type=range]').prop('disabled',true);
+    $('input[type=range]').css('opacity',0.7);
+    $('#catch-button').prop('disabled', true);
+    var timeoutTime = 0;
+    console.log(trial.catch.key);
+    if(trial.catch.key == 'NA' || trial.catch.key >= (trial.catch.response - 25) & trial.catch.key <= (trial.catch.response + 25)){
+        $('#postSlider').append('<img id="correctSlider" src="img/yup.png" height=18 vertical-align="middle" hspace="20">');
     } else{
-        trial.catch.question = 'How many red marbles did your opponent report drawing?'
-        trial.catch.key = trial.reportedDrawn;
+        $('#postSlider').append('<img id="correctSlider" src="img/nah.png" height=18 vertical-align="middle" hspace="20">');
+        timeoutTime = 3000;
     }
-    $('#catchQ').html('<label>'+trial.catch.question+'</label>');
-    $('#catchQ').append('<input type="text" id="reportCatch" value="" size="2" maxlength="2" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/> <button class="active-button" id="catch-button" type="button" onclick="submitCatch();">Submit</button> ');
+    setTimeout(function(){
+        if(trial.exptPart == 'practice' | (trial.trialNumber + 1) % 5 == 0){
+            $('.scoreboardDiv').css('opacity','1');
+        } 
+        $('.scoreReport').css('opacity','1');
+        $('#nextScoreboard').css('opacity','1');
+    }, timeoutTime);
+}
 
-    $('#catch-button').prop('disabled',true);
-    $('input[type=text]').on('input',
-        function(){
-            trial.catch.response = parseInt($(this).val());
-            if(trial.catch.response >= 0 && trial.catch.response <= 10 ){
-                $('#catch-button').prop('disabled',false);
+function catchTrial(role, exptPart){
+    var randomCatch = Math.random();
+    if(randomCatch < 0.5){
+        if(randomCatch < 0.25){
+            trial.catch.question = 'How many red/blue marbles did <i>you</i> think there were?';
+            if(role == 'bullshitter'){
+                trial.catch.key = trial.prob.global*100;
             } else{
-                $('#catch-button').prop('disabled',true);
+                trial.catch.key = trial.prob.bullshitDetectorRed*100;
             }
-    });
+        } else{
+            trial.catch.question = 'How many red/blue marbles did <i>your opponent</i> think there were?';
+            if(role == 'bullshitter'){
+                trial.catch.key = trial.prob.bullshitDetectorRed*100;
+            } else{
+                trial.catch.key = 'NA';
+            }
+        }
+        $('input[type=range]').prop('disabled',false);
+        $('input[type=range]').css('opacity',1);
+        $('input[type=range]').prop('value',50);
+        $('#catchQ').html('<label>'+trial.catch.question+'</label>');
+        $('#sliderContainer').css('display','block');
+        $('#postSlider').html('<br><br><button class="active-button" id="catch-button" type="button" onclick="submitCatchSlider();">Submit</button>');
+        $('#postSlider').css('display','block');
+        $('input[type=range]').on('input',
+            function(){
+                $('#catch-button').prop('disabled',false);
+        });
+    } else{
+        if(role == 'bullshitter'){
+            trial.catch.question = 'How many red marbles did you actually draw?';
+            trial.catch.key = trial.drawnRed;
+        } else{
+            trial.catch.question = 'How many red marbles did your opponent report drawing?';
+            trial.catch.key = trial.reportedDrawn;
+        }
+        $('#catchQ').html('<label>'+trial.catch.question+'</label>');
+        var inputTxt = '<input type="text" id="reportCatch" value="" size="2" maxlength="2" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/> ';
+        inputTxt += '<button class="active-button" id="catch-button" type="button" onclick="submitCatchText();">Submit</button>';
+        $('#catchQ').append(inputTxt);
 
+        $('input[type=text]').on('input',
+            function(){
+                trial.catch.response = parseInt($(this).val());
+                if(trial.catch.response >= 0 && trial.catch.response <= 10 ){
+                    $('#catch-button').prop('disabled',false);
+                } else{
+                    $('#catch-button').prop('disabled',true);
+                }
+        });
+    }
+
+    $('#catch-button').prop('disabled',true);  
     $('.scoreReport').css('opacity','0');
     $('.scoreboardDiv').css('opacity','0');
     $('#nextScoreboard').css('opacity','0');
@@ -484,12 +528,13 @@ function scorePrefix(score){
 }
 
 function distributeChecks(totalTrials, freq){
-    var round = Math.floor(totalTrials * freq);
-    var checkRounds = [];
-    for(var i=0; i<totalTrials/round; i++){
-        checkRounds.push(round*i + Math.floor(randomDouble(0,round)));
-    }
-    return(checkRounds);
+    // var round = Math.floor(totalTrials * freq);
+    // var checkRounds = [];
+    // for(var i=0; i<totalTrials/round; i++){
+    //     checkRounds.push(round*i + Math.floor(randomDouble(0,round)));
+    // }
+    var shuffled = shuffle([...Array(totalTrials).keys()]);
+    return(shuffled.slice(0,Math.floor(totalTrials*freq)));
 }
 
 // function distributeAsymm(totalTrials, freq){

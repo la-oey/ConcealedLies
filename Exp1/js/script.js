@@ -103,7 +103,7 @@ function clickInstructions() {
 
 function clickPrePractice(){
     document.getElementById('prePractice').style.display = 'none';
-    expt.catchTrials = distributeChecks(expt.practiceTrials, 0.50); // 0.5 of practice trials have an attention check
+    expt.catchTrials = distributeChecks(expt.practiceTrials, 1); // 50% of practice trials have an attention check
     if(expt.roleFirst == 'bullshitter'){
         bullshitter();
     } else{
@@ -114,7 +114,7 @@ function clickPrePractice(){
 function clickPostPractice(){
     document.getElementById('postPractice').style.display = 'none';
 
-    expt.catchTrials = distributeChecks(expt.trials, 0.10); // 0.1 of expt trials have an attention check
+    expt.catchTrials = distributeChecks(expt.trials, 0.15); // 0.1 of expt trials have an attention check
     
     expt.pseudo = distributePseudo(expt.trials, 0, 10);
 
@@ -136,13 +136,13 @@ function bullshitter() {
     restartTrial();
 
     var marbleInstruct = "<p class='instructText'>Click the 'Draw Marble' button to sample marbles from the box. Draw <b>10</b> marbles.</p>";
-    marbleInstruct += "<p class='instructText instructTextSmall'>Here's how points work if your opponent thinks you're telling the truth:</p>";
-    marbleInstruct += "<p class='instructText instructTextSmall tab'>each <b style='color:red'>red</b> is 1 point for you (marble-drawer); each <b style='color:blue'>blue</b> is 1 point for your opponent (responder).</p>";
-    marbleInstruct += "<p class='instructText instructTextSmall'>Remember, your opponent can only see the marbles visible through the cut out hole.</p>";
-
 
     $('#trialInstruct').html(marbleInstruct);
-    $('#subjResponse').html('<label><br><br><br>Say how many <b style="color:red">red</b> marbles you want your opponent to think you drew:</label><input type="text" id="reportMarbles" value="" size="2" maxlength="2" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/> <button class="active-button" id="report-button" type="button" onclick="report();">Report!</button><br>');
+    var responseText = "<p>Each <b style='color:red'>red</b> you report is 1 point for you; each <b style='color:blue'>blue</b> is 1 point for your opponent.</p>";
+    responseText += "<label><br>Say how many <b style='color:red'>red</b> marbles you want your opponent to think you drew:</label>";
+    responseText += "<input type='text' id='reportMarbles' value='' size='2' maxlength='2' autocomplete='off' autocorrect='off' autocapitalize='off' spellcheck='false'/> ";
+    responseText += "<button class='active-button' id='report-button' type='button' onclick='report();'>Report!</button><br>";
+    $('#subjResponse').html(responseText);
     $('#urnsvg').css('background-color','white');
     $('#tubesvg').css('background-color','white');
     $('#draw-button').prop('disabled',false);
@@ -164,8 +164,7 @@ function bullshitter() {
 function bullshitDetector() {
     restartTrial();
 
-    $('#trialInstruct').html("<p class='instructText'>It's your opponent's turn to sample marbles.<br><br><p>")
-    //$('#urnsvg').css('background-color','purple');
+    $('#trialInstruct').html("");
     $('#tubesvg').css('background-color','purple');
     $('#draw-button').prop('disabled',true);
 
@@ -175,16 +174,25 @@ function bullshitDetector() {
         trial.waitTime = 3000 + 6000*exponential(0.75);
         setTimeout(function(){
             clearInterval(trial.timer);
-            var responseInstruct = "<p class='instructText'>Click <b style='color:green'>'Accept'</b> if you think your opponent is <b style='color:green'>telling the truth</b>, or <b style='color:red'>'Reject'</b> if you think your opponent is <b style='color:red'>lying</b>.</p>"
-            responseInstruct += "<p class='instructText instructTextSmall'>Here's how points work if you think your opponent is telling the truth:</p>";
-            responseInstruct += "<p class='instructText instructTextSmall tab'>each <b style='color:red'>red</b> is 1 point for your opponent (marble-drawer); each <b style='color:blue'>blue</b> is 1 point for you (responder).</p>"
-            $('#trialInstruct').html(responseInstruct);
-            $('#subjResponse').html('<p>Your opponent said they drew <b id="reportMarbles"/> red marbles.<br><br>Your opponent will win <b id="oppPoints"></b> points and you will win <b id="yourPoints"/> points this round.<br><br></p>');
+
+            var responseInstruct = "<p>Your opponent said they drew <b id='reportMarbles'/> red marbles.</p>"
+            responseInstruct += "<p>Your opponent will win <b id='oppPoints'></b> points and you will win <b id='yourPoints'/> points this round.<br><br></p>";
+            responseInstruct += "<p id='responseAccRej'>Click <b style='color:green'>'Accept'</b> if you think your opponent is <b style='color:green'>telling the truth</b>, or <b style='color:red'>'Reject'</b> if you think your opponent is <b style='color:red'>lying</b>.</p>"
+            
+            $('#subjResponse').html(responseInstruct);
+            $('#subjResponse').css('opacity','1');
+            if(trial.exptPart == "trial"){
+                $('#responseAccRej').css('opacity','0');
+                setTimeout(function(){
+                    $('#responseAccRej').css('opacity','1');
+                }, 5000);    
+            }
+            
             computerDraw();
             $('#reportMarbles').html(trial.reportedDrawn);
             $('#oppPoints').html(trial.reportedDrawn);
             $('#yourPoints').html(expt.marblesSampled - trial.reportedDrawn);
-            $('#subjResponse').css('opacity','1');
+            
             $('#buttonResponse').css('opacity','1');
             trial.responseStartTime = Date.now();
         }, trial.waitTime);
