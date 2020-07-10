@@ -2,7 +2,42 @@
 #slider {
     -webkit-appearance: none;
     margin: 18px 0;
-    width: 70%;
+    width: 100%;
+}
+
+
+#slider::-webkit-slider-runnable-track {
+    height: 8.4px;
+    cursor: pointer;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    border-radius: 1.3px;
+    border: 0.2px solid #010101;
+}
+
+#slider::-webkit-slider-thumb {
+    height: 36px;
+    width: 16px;
+    border-radius: 3px;
+    background: gray;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -14px;
+}
+
+#slider::-moz-range-track {
+    cursor: pointer;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    border-radius: 1.3px;
+    border: 0.2px solid #010101;
+}
+
+#slider::-moz-range-thumb {
+    height: 36px;
+    border-radius: 3px;
+    background: gray;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -14px;
 }
 
 .inactiveSlider::-webkit-slider-runnable-track {
@@ -14,6 +49,16 @@
     border: 0;
 }
 
+.inactiveSlider::-moz-range-track {
+    height: 14px;
+    background: gray;
+}
+
+.inactiveSlider::-moz-range-thumb {
+    width: 0px;
+    border: 0;
+}
+
 .activeSlider::-webkit-slider-runnable-track {
     overflow: visible;
 }
@@ -22,49 +67,14 @@
     border: 1px solid black;
 }
 
-#slider::-webkit-slider-runnable-track {
-    width: 95%;
+.activeSlider::-moz-range-track {
     height: 8.4px;
-    cursor: pointer;
-    animate: 0.2s;
-    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-    border-radius: 1.3px;
-    border: 0.2px solid #010101;
 }
 
-#slider::-webkit-slider-thumb {
-    /*border: 1px solid #000000;*/
-    height: 36px;
+.activeSlider::-moz-range-thumb {
     width: 16px;
-    border-radius: 3px;
-    background: gray;
-    cursor: pointer;
-    -webkit-appearance: none;
-    margin-top: -14px;
-    /*box-shadow: -350px 0 0 350px red;*/
+    border: 1px solid black;
 }
-
-#slider::-ms-track {
-    width: 95%;
-    height: 8.4px;
-    cursor: pointer;
-    animate: 0.2s;
-    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-    background: #0000CD;
-    border-radius: 1.3px;
-    border: 0.2px solid #010101;
-}
-
-#slider::-ms-thumb {
-    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-    border: 1px solid #000000;
-    height: 36px;
-    width: 16px;
-    border-radius: 3px;
-    background: #ffffff;
-    cursor: pointer;
-}
-
 
 
 
