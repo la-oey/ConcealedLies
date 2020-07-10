@@ -137,10 +137,10 @@ function bullshitter() {
     var marbleInstruct = "<p class='instructText'>Click the 'Draw Marble' button to sample marbles from the box. Draw <b>10</b> marbles.</p>";
 
     $('#trialInstruct').html(marbleInstruct);
-    var responseText = "<p>Each <b style='color:red'>red</b> you report is 1 point for you; each <b style='color:blue'>blue</b> is 1 point for your opponent.</p>";
+    var responseText = "<p><br>Each <b style='color:red'>red</b> you report is 1 point for you; each <b style='color:blue'>blue</b> is 1 point for your opponent.</p>";
     responseText += "<label><br>Say how many <b style='color:red'>red</b> marbles you want your opponent to think you drew:</label>";
     responseText += "<input type='text' id='reportMarbles' value='' size='2' maxlength='2' autocomplete='off' autocorrect='off' autocapitalize='off' spellcheck='false'/> ";
-    responseText += "<button class='active-button' id='report-button' type='button' onclick='report();'>Report!</button><br>";
+    responseText += "<button class='active-button' id='report-button' type='button' onclick='report();'>Report!</button><br><br>";
     $('#subjResponse').html(responseText);
     $('#urnsvg').css('background-color','white');
     $('#tubesvg').css('background-color','white');

@@ -171,7 +171,7 @@ function report(){
         trial.waitTime = 1000 + 3000*exponential(0.75);
         setTimeout(function(){
             clearInterval(trial.timer);
-            $('#subjResponse').html("<p><br>Your opponent made a decision.<br><br></p>")
+            $('#subjResponse').html("<p><br><br>Your opponent made a decision.<br><br><br></p>")
             $('#subjResponse').css('opacity','1');
             $('#next').prop('disabled',false);
         }, trial.waitTime);
@@ -332,7 +332,6 @@ function submitCatchSlider(){
     $('input[type=range]').css('opacity',0.7);
     $('#catch-button').prop('disabled', true);
     var timeoutTime = 0;
-    console.log(trial.catch.key);
     if(trial.catch.key == 'NA' || trial.catch.key >= (trial.catch.response - 25) & trial.catch.key <= (trial.catch.response + 25)){
         $('#postSlider').append('<img id="correctSlider" src="img/yup.png" height=18 vertical-align="middle" hspace="20">');
     } else{
@@ -352,17 +351,16 @@ function submitCatchSlider(){
 
 function catchTrial(role, exptPart){
     var randomCatch = Math.random();
-    randomCatch = 0.1
     if(randomCatch < 0.5){
         if(randomCatch < 0.25){
-            trial.catch.question = 'How many red/blue marbles did <i>you</i> think there were?';
+            trial.catch.question = "What was the proportion of red to blue marbles from your perspective?";
             if(role == 'bullshitter'){
                 trial.catch.key = trial.prob.global*100;
             } else{
                 trial.catch.key = trial.prob.bullshitDetectorRed*100;
             }
         } else{
-            trial.catch.question = 'How many red/blue marbles did <i>your opponent</i> think there were?';
+            trial.catch.question = "What was the proportion of red to blue marbles from your opponent's perspective'?";
             if(role == 'bullshitter'){
                 trial.catch.key = trial.prob.bullshitDetectorRed*100;
             } else{
