@@ -51,8 +51,8 @@ function fillUrn(whooccl) {
             var locX = randomDouble(gridX, gridX + spaceWidth);
             var locY = randomDouble(gridY, gridY + spaceHeight);
 
-            if(locX > (occXL - 10) && locX < (occXR + 10) && 
-                locY > (occYT - 10) && locY < (occYB + 10)){
+            if(locX > (occXL - 17.5) && locX < (occXR + 17.5) && 
+                locY > (occYT - 17.5) && locY < (occYB + 17.5)){
                 var color = "blue";
                 // balls in urn correspond to exact probability distribution, i.e. no random sampling
                 if(Math.random() < trial.prob.bullshitDetectorRed){
@@ -84,8 +84,8 @@ function fillUrn(whooccl) {
             var locX = randomDouble(gridX, gridX + spaceWidth);
             var locY = randomDouble(gridY, gridY + spaceHeight);
 
-            if(locX > (occXL - 10) && locX < (occXR + 10) && 
-                locY > (occYT - 10) && locY < (occYB + 10)){
+            if(locX > (occXL - 17.5) && locX < (occXR + 17.5) && 
+                locY > (occYT - 17.5) && locY < (occYB + 17.5)){
                 var color = "blue";
 
                 // balls in urn correspond to exact probability distribution, i.e. no random sampling
@@ -192,12 +192,10 @@ function computerDraw(){
     if(trial.pseudoRound){
         trial.reportedDrawn = expt.pseudo[trial.trialNumber];
     } else{
-        if(Math.random() < 0.2){
-            console.log("random lie!");
+        if(trial.exptPart == "trial" & Math.random() < 0.2){ //only occurs during trial
             trial.compUnifLie = true;
             trial.reportedDrawn = Math.floor(randomDouble(0,11));
         } else{
-            console.log("non-random lie!");
             var rand = Math.random();
             var lie = getK(expt.marblesSampled, trial.prob.bullshitDetectorRed, rand); //detector's belief about the distribution
             trial.compLie = lie;
@@ -279,6 +277,7 @@ function restartTrial(){
     $('#catchQ').hide();
     $('#sliderContainer').hide();
     $('#postSlider').hide();
+    $('#qInstruct').hide();
     $('#slider').addClass('inactiveSlider');
     $('#slider').removeClass('activeSlider');
 
@@ -350,6 +349,9 @@ function submitCatchSlider(){
 
 
 function catchTrial(role, exptPart){
+    if(trial.exptPart == "practice" & trial.trialNumber == 0){
+        $('#catchQ').before("<p id='qInstruct'>Throughout the experiment, you will randomly be asked questions about the task.<br>If you get the question wrong, you have to wait 3 seconds before being able to move on.<br><br></p>")
+    }
     var randomCatch = Math.random();
     if(randomCatch < 0.5){
         if(randomCatch < 0.25){
@@ -360,7 +362,7 @@ function catchTrial(role, exptPart){
                 trial.catch.key = trial.prob.bullshitDetectorRed*100;
             }
         } else{
-            trial.catch.question = "What was the proportion of red to blue marbles from your opponent's perspective'?";
+            trial.catch.question = "What was the proportion of red to blue marbles from your opponent's perspective?";
             if(role == 'bullshitter'){
                 trial.catch.key = trial.prob.bullshitDetectorRed*100;
             } else{
