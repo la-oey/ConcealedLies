@@ -377,10 +377,11 @@ function catchTrial(role, exptPart){
         $('#postSlider').html('<br><br><button class="active-button" id="catch-button" type="button" onclick="submitCatchSlider();">Submit</button>');
         $('#postSlider').css('display','block');
 
-        $('#slider').on('input',
+        $('#slider').on('click input',
         function(){
             var val = $('#slider').prop('value');
             var dynamColor = 'linear-gradient(90deg, red ' + val + '%, blue ' + val + '%)';
+
             $('#slider').removeClass('inactiveSlider');
             $('#slider').addClass('activeSlider');
             $('.activeSlider').css('background',dynamColor); 
