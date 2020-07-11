@@ -33,7 +33,7 @@ var expt = {
         experiment_id: 1505,
         credit_token: 'b20092f9d3b34a378ee654bcc50710ea'
     },
-    debug: true
+    debug: false
 };
 var trial = {
     exptPart: 'practice', //parts: {'practice','trial'}
